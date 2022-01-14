@@ -1,7 +1,7 @@
 const Banner = {
     render() {
         return `<section>
-        <img src="images/banner.jpg" alt="" class="banner py-3"/>
+        <img class="py-3" src="https://picsum.photos/1500/400" alt="" />
       </section>`;
     },
 };
