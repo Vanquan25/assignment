@@ -1,6 +1,7 @@
 const Dashboard = {
     render() {
-        return `<div>
+        return /* html */ `
+        <div>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
         
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
