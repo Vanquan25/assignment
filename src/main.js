@@ -5,46 +5,54 @@ import ProductPage from "./pages/product";
 import DetailPage from "./pages/detail";
 import AdminProductPage from "./pages/admin/adminproduct";
 import AdminProductEdit from "./pages/admin/productEdit";
-import SignUp from "./pages/signup";
-import SignIn from "./pages/signin";
+import Signup from "./pages/signup";
+import Signin from "./pages/signin";
 import AdminDashboard from "./pages/admin/admindashboard";
+import index from "./pages/admin";
+import Add from "./pages/admin/add";
+import adminEdit from "./pages/admin/edit";
 
 const router = new Navigo("/", { linksSelector: "a" });
 
-const print = (content) => {
-    document.querySelector("#app").innerHTML = content;
+const print = async (content, id) => {
+    document.querySelector("#app").innerHTML = await content.render(id);
+    if (content.afterRender) await content.afterRender();
 };
 
 router.on({
-    "/": () => {
-        print(HomePage.render());
+    "/": () => print(HomePage),
+    "/about": () => print(AboutPage),
+    "/product": () => print(ProductPage),
+    "/signup": () => print(Signup),
+    "/signin": () => print(Signin),
+    "/product/:id": ({ data }) => print(DetailPage, data.id),
+    "/admin/products": () => print(AdminProductPage),
+    "/admin/product/:id/edit": ({ data }) => print(AdminProductEdit, data.id),
+    "/admin/dashboard": () => print(AdminDashboard),
+    "/admin/add": () => {
+        print(Add);
     },
-    "/about": () => {
-        print(AboutPage.render());
+    "/admin/list": () => {
+        print(index);
     },
-    "/product": () => {
-        print(ProductPage.render());
-    },
-    "/signup": () => {
-        print(SignUp.render());
-    },
-    "/signin": () => {
-        print(SignIn.render());
-    },
-    "/product/:id": ({ data }) => {
-        const { id } = data;
-        print(DetailPage.render(id));
-    },
-    "/admin/products": () => {
-        print(AdminProductPage.render());
-    },
-    "/admin/product/:id/edit": ({ data }) => {
-        const { id } = data;
-        print(AdminProductEdit.render(id));
-    },
-    "/admin/dashboard": () => {
-        print(AdminDashboard.render());
-    },
+    "/admin/list/:id/edit": ({ data }) => print(adminEdit, data.id),
 });
 
 router.resolve();
+
+// const getProduct = () => new Promise((resolve, reject)) => {
+//     setTimeout(() => {
+//         try {
+//             resolve([1,2,3,4])
+//         } catch (error) {
+//             reject("Kết nối không thành công")
+//         }
+//     }, 3000)
+// });
+
+// const showProduct = async () => {
+//     const result = await getProduct();
+//     const data = await [...result, 5];
+//     console.log(data);
+// }
+// showProduct();

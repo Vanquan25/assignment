@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 
 const HomePage = {
-    render() {
+    async render() {
         return /* html */`
         <div class="max-w-5xl mx-auto">
         ${Header.render()}
@@ -13,14 +13,15 @@ const HomePage = {
         ${Banner.render()}
     </div>
     <div class="news">
-        ${News.render()}
+        ${await News.render()}
     </div>
         </main>
         ${Footer.render()}
       </div>
-
-         
         `;
+    },
+    afterRender() {
+        Header.afterRender();
     },
 };
 export default HomePage;

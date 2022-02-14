@@ -1,8 +1,9 @@
 import Banner from "../components/banner";
 import Footer from "../components/footer";
 import Header from "../components/header";
+import { signin } from "../api/user";
 
-const SignIn = {
+const Signin = {
     render() {
         return /* html */`
         <div class="max-w-5xl mx-auto">
@@ -18,12 +19,12 @@ const SignIn = {
           Sign In
         </h2>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form id="formSignin" class="mt-8 space-y-6" action="#" method="POST">
         <input type="hidden" name="remember" value="true">
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
-            <label for="email-address" class="sr-only">Email address</label>
-            <input id="email-address" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address">
+            <label for="email" class="sr-only">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="email">
           </div>
           <div>
             <label for="password" class="sr-only">Password</label>
@@ -60,5 +61,23 @@ const SignIn = {
         ${Footer.render()}
       </div>`;
     },
+    afterRender() {
+        const formSignin = document.querySelector("#formSignin");
+        formSignin.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const { data } = await signin({
+                email: document.querySelector("#email").value,
+                password: document.querySelector("#password").value,
+            });
+            // lưu dữ liệu vào localStorage
+            localStorage.setItem("user", JSON.stringify(data.user));
+            // kiểm tra quyền dựa trên ID
+            if (data.user.id === 1) {
+                document.location.href = "/admin/dashboard";
+            } else {
+                document.location.href = "/";
+            }
+        });
+    },
 };
-export default SignIn;
+export default Signin;
